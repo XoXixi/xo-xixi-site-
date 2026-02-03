@@ -38,7 +38,7 @@ export function HowItWorks() {
             Limpeza completa em <span className="text-orange-600 underline decoration-orange-300 decoration-4 underline-offset-4">3 passos</span>
           </h3>
           <p className="text-lg md:text-xl text-slate-600 leading-relaxed">
-            Esqueça o balde, o pano de chão e o desinfetante. 
+            Esqueça o balde e o pano de chão. 
             <br className="hidden md:block" />
             Veja como é fácil manter sua casa limpa.
           </p>

@@ -66,6 +66,16 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             >
                 Nossos Kits
             </Link>
+
+            {/* 👇 NOVO LINK: BLOG (Adicionei aqui para ficar organizado) */}
+            <Link 
+                href="/blog" 
+                onClick={onClose}
+                className="text-lg font-bold text-orange-600 bg-orange-50 hover:bg-orange-100 p-3 rounded-xl transition-all flex items-center gap-3 border border-orange-100"
+            >
+                Blog Xô Xixi
+            </Link>
+
             <Link 
                 href="/#faq" 
                 onClick={onClose}
@@ -97,7 +107,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 </Button>
             </div>
             <p className="text-[10px] text-center text-slate-400 mt-6">
-                © 2024 Xô Xixi. Todos os direitos reservados.
+                © 2026 Xô Xixi. Todos os direitos reservados.
             </p>
         </div>
 

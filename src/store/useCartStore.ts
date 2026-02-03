@@ -8,17 +8,20 @@ export interface CartItem {
   price: number;
   image: string;
   quantity: number;
-  kitName?: string; // Ex: "Kit Essencial"
+  kitName?: string;
 }
 
 // 2. Definindo as ações da nossa "Mochila"
 interface CartState {
   items: CartItem[];
-  isOpen: boolean; // Para controlar se o carrinho lateral está aberto ou fechado
+  isOpen: boolean;
   addItem: (item: CartItem) => void;
   removeItem: (id: number) => void;
   updateQuantity: (id: number, quantity: number) => void;
-  toggleCart: () => void; // Abre/Fecha o carrinho
+  toggleCart: () => void;
+  // 👇 ADICIONEI ESSAS DUAS:
+  openCart: () => void; 
+  closeCart: () => void;
   clearCart: () => void;
   getCartTotal: () => number;
 }
@@ -32,22 +35,19 @@ export const useCartStore = create<CartState>()(
 
       addItem: (newItem) => {
         const { items } = get();
-        // Verifica se o item já existe no carrinho
         const existingItem = items.find((item) => item.id === newItem.id);
 
         if (existingItem) {
-          // Se já existe, só aumenta a quantidade
           set({
             items: items.map((item) =>
               item.id === newItem.id
                 ? { ...item, quantity: item.quantity + newItem.quantity }
                 : item
             ),
-            isOpen: true, // Abre o carrinho automaticamente ao adicionar
+            isOpen: true, // Tenta abrir aqui
           });
         } else {
-          // Se não existe, adiciona na lista
-          set({ items: [...items, newItem], isOpen: true });
+          set({ items: [...items, newItem], isOpen: true }); // Tenta abrir aqui também
         }
       },
 
@@ -57,7 +57,6 @@ export const useCartStore = create<CartState>()(
 
       updateQuantity: (id, quantity) => {
         if (quantity <= 0) {
-          // Se diminuir pra 0, remove o item
           get().removeItem(id);
         } else {
           set({
@@ -69,6 +68,10 @@ export const useCartStore = create<CartState>()(
       },
 
       toggleCart: () => set({ isOpen: !get().isOpen }),
+
+      // 👇 AS NOVAS FUNÇÕES EXPLICITAS:
+      openCart: () => set({ isOpen: true }),   // Força abrir
+      closeCart: () => set({ isOpen: false }), // Força fechar
       
       clearCart: () => set({ items: [] }),
 
@@ -77,8 +80,8 @@ export const useCartStore = create<CartState>()(
       },
     }),
     {
-      name: 'xo-xixi-cart-storage', // Nome único para salvar no LocalStorage
-      storage: createJSONStorage(() => localStorage), // Usa o LocalStorage do navegador
+      name: 'xo-xixi-cart-storage',
+      storage: createJSONStorage(() => localStorage),
     }
   )
 );

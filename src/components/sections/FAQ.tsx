@@ -17,7 +17,7 @@ export function FAQ() {
     },
     {
       question: "Quanto tempo dura um frasco de 250g?",
-      answer: "Depende do porte do seu pet e da frequência. Para um cachorro de porte pequeno/médio, um frasco costuma render cerca de 10 a 15 aplicações generosas.",
+      answer: "Depende do porte do seu pet e da frequência. Para um cachorro de porte pequeno/médio, um frasco costuma render cerca de 50 a 60 aplicações.",
     },
     {
       question: "Onde devo descartar o produto depois de varrer?",

@@ -1,90 +1,114 @@
+import { client, urlFor } from "@/sanity/client";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, BookOpen } from "lucide-react";
+import { ArrowRight, Calendar } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
-export function BlogPreview() {
-  const posts = [
-    {
-      category: "Dicas de Limpeza",
-      title: "Como tirar cheiro de xixi do tapete definitivamente",
-      excerpt: "Parece impossível, mas com a técnica certa você salva seu tapete sem precisar lavar.",
-      readTime: "5 min de leitura",
-      gradient: "from-orange-400 to-red-500", // Cor do placeholder da imagem
-    },
-    {
-      category: "Comportamento",
-      title: "Seu cachorro faz xixi no lugar errado? Entenda o porquê",
-      excerpt: "Muitas vezes não é teimosia, é um sinal que ele está tentando te passar.",
-      readTime: "7 min de leitura",
-      gradient: "from-blue-400 to-blue-600",
-    },
-    {
-      category: "Saúde Pet",
-      title: "A cor do xixi do seu pet diz muito sobre a saúde dele",
-      excerpt: "Aprenda a identificar sinais de alerta apenas observando a cor e o cheiro.",
-      readTime: "4 min de leitura",
-      gradient: "from-green-400 to-emerald-600",
-    },
-  ];
+interface Post {
+  _id: string;
+  title: string;
+  description: string;
+  category: string;
+  slug: { current: string };
+  publishedAt: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  mainImage: any;
+}
+
+async function getPosts() {
+  const query = `*[_type == "post"] | order(publishedAt desc)[0...3] {
+    _id,
+    title,
+    description,
+    category,
+    slug,
+    publishedAt,
+    mainImage
+  }`;
+  
+  return await client.fetch(query, {}, { next: { revalidate: 0 } });
+}
+
+export async function BlogPreview() {
+  const posts: Post[] = await getPosts(); 
+
+  if (posts.length === 0) return null;
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-24 bg-slate-50">
       <div className="container mx-auto px-4">
         
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-          <div className="max-w-2xl">
-            <h2 className="text-sm font-bold text-orange-600 uppercase tracking-widest mb-2">
+        {/* Cabeçalho da Seção */}
+        <div className="flex items-end justify-between mb-12">
+          <div className="max-w-xl">
+            <span className="text-orange-600 font-bold uppercase tracking-wider text-sm">
               Blog Xô Xixi
+            </span>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-2">
+              Dicas de Especialista
             </h2>
-            <h3 className="text-3xl md:text-4xl font-extrabold text-slate-900">
-              Dicas para uma casa limpa e um <span className="text-orange-600">pet feliz</span>
-            </h3>
           </div>
-          
-          <Button variant="outline" className="hidden md:flex gap-2 border-orange-200 text-orange-700 hover:bg-orange-50">
-            Ver todos os artigos <ArrowRight className="w-4 h-4" />
-          </Button>
+          <Link href="/blog" className="hidden md:flex">
+             <Button variant="outline" className="gap-2 border-slate-300 text-slate-700 hover:text-orange-600 hover:border-orange-200 bg-white">
+                Ver todos os artigos <ArrowRight className="w-4 h-4" />
+             </Button>
+          </Link>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
-          {posts.map((post, index) => (
-            <Link key={index} href="#" className="group">
-              <article className="flex flex-col h-full">
-                {/* Imagem (Placeholder com Gradiente) */}
-                <div className={`h-48 rounded-2xl bg-gradient-to-br ${post.gradient} mb-6 relative overflow-hidden group-hover:scale-[1.02] transition-transform duration-300 shadow-sm`}>
-                    <div className="absolute inset-0 bg-black/10 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                        <span className="font-bold flex items-center gap-2">Ler Artigo <ArrowRight className="w-4 h-4"/></span>
+        {/* Grid de Posts */}
+        <div className="grid md:grid-cols-3 gap-x-8 gap-y-12">
+          {posts.map((post) => (
+            <Link 
+              key={post._id} 
+              href={`/blog/${post.slug.current}`}
+              className="group cursor-pointer flex flex-col h-full"
+            >
+              {/* Imagem Limpa (Sem etiqueta em cima) */}
+              <div className="relative h-60 w-full overflow-hidden rounded-2xl bg-slate-200 mb-6 shadow-sm group-hover:shadow-md transition-all duration-300">
+                {post.mainImage ? (
+                  <Image
+                    src={urlFor(post.mainImage).url()} 
+                    alt={post.title}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                ) : (
+                  <div className="h-full w-full flex items-center justify-center text-slate-400">Sem Imagem</div>
+                )}
+              </div>
+
+              {/* Conteúdo */}
+              <div className="flex flex-col flex-grow">
+                {/* 👇 AQUI ESTÁ A MUDANÇA: Categoria acima do título */}
+                <div className="flex items-center justify-between mb-3">
+                    <span className="text-orange-600 text-xs font-bold uppercase tracking-wider">
+                        {post.category || "Geral"}
+                    </span>
+                    <div className="flex items-center gap-1 text-xs font-medium text-slate-400">
+                        <Calendar className="w-3 h-3" />
+                        {post.publishedAt 
+                            ? new Date(post.publishedAt).toLocaleDateString("pt-BR")
+                            : "Recente"}
                     </div>
                 </div>
+                
+                <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-orange-600 transition-colors leading-tight">
+                  {post.title}
+                </h3>
+                
+                <p className="text-slate-600 text-sm leading-relaxed line-clamp-2 mb-4">
+                    {post.description}
+                </p>
 
-                {/* Conteúdo */}
-                <div className="flex-1 flex flex-col">
-                    <div className="flex items-center gap-3 text-xs font-bold text-slate-400 mb-3 uppercase tracking-wider">
-                        <span className="text-orange-600">{post.category}</span>
-                        <span>•</span>
-                        <span>{post.readTime}</span>
-                    </div>
-                    <h4 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-orange-600 transition-colors">
-                        {post.title}
-                    </h4>
-                    <p className="text-slate-600 text-sm leading-relaxed mb-4 flex-1">
-                        {post.excerpt}
-                    </p>
-                    <span className="text-sm font-bold text-orange-600 flex items-center gap-1 group-hover:gap-2 transition-all">
-                        Ler completo <ArrowRight className="w-4 h-4" />
+                <div className="mt-auto pt-2">
+                    <span className="text-slate-900 font-semibold text-sm flex items-center gap-2 group-hover:translate-x-1 transition-transform border-b border-transparent group-hover:border-orange-600 w-fit pb-0.5">
+                        Ler completo <ArrowRight className="w-4 h-4 text-orange-600" />
                     </span>
                 </div>
-              </article>
+              </div>
             </Link>
           ))}
         </div>
-
-        <div className="mt-8 md:hidden text-center">
-             <Button variant="outline" className="w-full gap-2 border-orange-200 text-orange-700">
-                Ver todos os artigos <ArrowRight className="w-4 h-4" />
-            </Button>
-        </div>
-
       </div>
     </section>
   );

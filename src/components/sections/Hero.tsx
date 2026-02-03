@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Clock, ShieldCheck, Droplet } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link"; // 1. Importar Link
 
 const CAMINHO_DA_FOTO_FRASCO = "/frasco.png"; 
 const USAR_FOTO_FRASCO_REAL = true; 
@@ -45,16 +46,17 @@ export function Hero() {
             </h1>
 
             <p className="text-xl text-slate-800 font-medium max-w-lg mx-auto lg:mx-0 leading-relaxed mb-10">
-              Mantenha sua casa impecável e livre de odores, economizando água e panos, sem esforço.
-              A tecnologia que transforma o xixi em pó instantaneamente.
+              Transforme o xixi em pó e acabe com o mau cheiro em segundos. 
+              Sem gastar água e sem sujar panos: é só aplicar, esperar secar e varrer.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
+              <Link href="/#produtos">
               <Button size="lg" className="h-14 px-10 text-lg font-bold bg-orange-600 hover:bg-orange-700 text-white shadow-xl shadow-orange-600/25 hover:shadow-orange-600/40 hover:-translate-y-1 transition-all rounded-full w-full sm:w-auto">
                 Quero experimentar
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-              
+              </Link>
               <div className="flex items-center gap-2 text-sm font-semibold text-slate-700 px-4 py-2 rounded-full hover:bg-white/60 transition-colors cursor-pointer border border-transparent hover:border-slate-200">
                 <ShieldCheck className="w-5 h-5 text-green-600" />
                 Garantia total de satisfação

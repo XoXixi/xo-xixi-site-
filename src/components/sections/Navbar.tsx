@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react"; // <--- 1. Importar useState
+import { useState } from "react";
 import { ShoppingCart, Menu, PawPrint } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/useCartStore";
-import { MobileMenu } from "./MobileMenu"; // <--- 2. Importar o componente novo
+import { MobileMenu } from "./MobileMenu";
 
 // 👇 CONFIGURAÇÃO
 const USAR_LOGO_IMAGEM = true; 
@@ -15,7 +15,7 @@ const CAMINHO_DA_LOGO = "/logo.png";
 export function Navbar() {
   const { toggleCart, items } = useCartStore();
   
-  // 3. Criar o estado para controlar o Menu Mobile
+  // Estado para controlar o Menu Mobile
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
@@ -45,10 +45,16 @@ export function Navbar() {
             </div>
           </Link>
 
-          {/* --- MENU DESKTOP (Escondido no Mobile) --- */}
+          {/* --- MENU DESKTOP --- */}
           <nav className="hidden md:flex items-center gap-8 text-sm font-bold text-slate-600 uppercase tracking-wide">
             <Link href="/" className="hover:text-orange-600 px-3 py-2 transition-colors">Home</Link>
             <Link href="/#produtos" className="hover:text-orange-600 px-3 py-2 transition-colors">Produtos</Link>
+            
+            {/* 👇 ADICIONEI O BLOG AQUI */}
+            <Link href="/blog" className="text-orange-600 hover:text-orange-700 px-3 py-2 transition-colors font-extrabold">
+                Blog
+            </Link>
+
             <Link href="/#sobre" className="hover:text-orange-600 px-3 py-2 transition-colors">Sobre</Link>
             <Link href="/#contato" className="hover:text-orange-600 px-3 py-2 transition-colors">Contato</Link>
           </nav>
@@ -71,12 +77,12 @@ export function Navbar() {
               )}
             </Button>
 
-            {/* BOTÃO MENU MOBILE (Só aparece no Mobile) */}
+            {/* BOTÃO MENU MOBILE */}
             <Button 
               variant="ghost" 
               size="icon" 
               className="md:hidden text-slate-700"
-              onClick={() => setIsMobileMenuOpen(true)} // <--- 4. Ação de Abrir
+              onClick={() => setIsMobileMenuOpen(true)}
             >
               <Menu className="h-6 w-6" />
             </Button>
@@ -85,7 +91,6 @@ export function Navbar() {
         </div>
       </header>
 
-      {/* 5. Inserir o Componente MobileMenu aqui fora do header */}
       <MobileMenu 
         isOpen={isMobileMenuOpen} 
         onClose={() => setIsMobileMenuOpen(false)} 
