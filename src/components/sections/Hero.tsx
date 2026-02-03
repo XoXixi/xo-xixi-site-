@@ -3,7 +3,7 @@ import { ArrowRight, Clock, ShieldCheck, Droplet } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link"; // 1. Importar Link
 
-const CAMINHO_DA_FOTO_FRASCO = "/frasco.png"; 
+const CAMINHO_DA_FOTO_FRASCO = "/Frasco.png"; 
 const USAR_FOTO_FRASCO_REAL = true; 
 
 // Imagem da Sala Aconchegante
