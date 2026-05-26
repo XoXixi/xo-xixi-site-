@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/sections/Navbar";
 import { Hero } from "@/components/sections/Hero";
 import { HowItWorks } from "@/components/sections/HowItWorks";
+import { DemoVideo } from "@/components/sections/DemoVideo"; // 👇 Componente importado aqui
 import { Products } from "@/components/sections/Products";
 import { BlogPreview } from "@/components/sections/BlogPreview";
 import { FAQ } from "@/components/sections/FAQ";
@@ -13,13 +14,15 @@ export default function Home() {
       <Navbar />
       <Hero />
       
+      
       <section id="sobre">
         <HowItWorks />
+        <DemoVideo /> 
       </section>
       
       <Products />
       
-      {/* 👇 AGORA SIM: Removi o comentário, o componente está ativo! */}
+       
       <BlogPreview />
       
       <section id="faq">
